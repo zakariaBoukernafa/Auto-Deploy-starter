@@ -71,7 +71,7 @@ jobs:
       - restore_cache:
           keys: [frontend-dependencies]
       - run:
-          name: Front-end scan
+          name: Scan frontend depedencies
           working_directory: ./frontend
           command: |
             npm i
@@ -85,7 +85,7 @@ jobs:
       - restore_cache:
           keys: [backend-dependencies]
       - run:
-          name: Back-end scan
+          name: Scan backend depedencies
           working_directory: ./backend
           command: |
             npm i
