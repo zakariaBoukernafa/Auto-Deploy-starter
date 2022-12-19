@@ -91,7 +91,8 @@ jobs:
           command: |
             npm i
             npm audit fix --audit-level=critical --force
-            npm update path-parse --depth          
+            npm audit fix --audit-level=critical --force     
+            npm audit fix --audit-level=critical --force            
             npm audit --audit-level=critical
 
 workflows:
