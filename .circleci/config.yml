@@ -1,10 +1,11 @@
 version: 2.1
-slack_notification:
-  steps:
-    - slack/notify:
-        channel: 03-cloud-devops-eng
-        event: fail
-        template: basic_fail_1
+commands:
+  slack_notification:
+    steps:
+      - slack/notify:
+          channel: 03-cloud-devops-eng
+          event: fail
+          template: basic_fail_1
 
 orbs:
   slack: circleci/slack@4.12.0
