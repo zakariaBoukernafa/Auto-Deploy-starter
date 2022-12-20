@@ -1,4 +1,13 @@
 version: 2.1
+slack_notification:
+  steps:
+    - slack/notify:
+        channel: 03-cloud-devops-eng
+        event: fail
+        template: basic_fail_1
+
+orbs:
+  slack: circleci/slack@4.12.0
 
 jobs:
   build-frontend:
@@ -48,6 +57,7 @@ jobs:
           command: |
             npm i 
             npm run test
+      - slack_notification
 
   test-backend:
     docker:
@@ -62,6 +72,7 @@ jobs:
           command: |
             npm i 
             npm run test
+      - slack_notification
 
   scan-frontend:
     docker:
@@ -77,6 +88,7 @@ jobs:
             npm i
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+      - slack_notification
 
   scan-backend:
     docker:
@@ -93,6 +105,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force            
             npm audit --audit-level=critical
+      - slack_notification
 
 workflows:
   default:
