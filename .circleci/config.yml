@@ -6,6 +6,7 @@ commands:
           channel: 03-cloud-devops-eng
           event: fail
           template: basic_fail_1
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -20,6 +21,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_ID >>
             aws s3 rm s3://udapeople-<<parameters.workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_ID >>
+
 orbs:
   slack: circleci/slack@4.12.0
 
@@ -127,6 +129,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install tar gzip
+          command: yum -y install tar gzip
+      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -150,11 +155,34 @@ jobs:
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> ~/project/.circleci/ansible/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
-      - run: yum -y install tar gzip
+
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - destroy-environment
+
+  configure-infrastructure:
+    docker:
+      - image: python:alpine3.17
+
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["fa:02:d7:1e:14:77:fc:ee:53:f6:e3:dd:bf:a8:77:2a"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            pip install awscli
+      - run:
+          name: Configure server
+          working_directory: .circleci/ansible
+          command: |
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.
       - destroy-environment
 
 workflows:
@@ -175,3 +203,5 @@ workflows:
           filters:
             branches:
               only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
