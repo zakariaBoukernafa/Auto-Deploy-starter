@@ -125,7 +125,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/aws:2022.11
     steps:
       - checkout
       - run:
@@ -214,7 +214,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/aws:2022.11
     steps:
       - checkout
       - run:
