@@ -130,7 +130,7 @@ jobs:
       - checkout
       - run:
           name: install tar gzip
-          command: yum -y install tar gzip
+          command: yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -221,6 +221,10 @@ jobs:
           at: ~/
       - restore_cache:
           keys: [frontend-dependencies]
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
       - run:
           name: Install dependencies
           working_directory: frontend
