@@ -128,9 +128,7 @@ jobs:
       - image: cimg/aws:2022.11
     steps:
       - checkout
-      - run:
-          name: install tar gzip
-          command: yum install -y tar gzip
+
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -217,10 +215,6 @@ jobs:
       - image: cimg/aws:2022.11
     steps:
       - checkout
-      - run:
-          name: Install tar utility
-          command: |
-            yum install -y tar gzip
 
       - attach_workspace:
           at: ~/
