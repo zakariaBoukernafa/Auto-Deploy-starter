@@ -217,14 +217,16 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
-      - restore_cache:
-          keys: [frontend-build]
       - run:
           name: Install tar utility
           command: |
             yum install -y tar gzip
+
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys: [frontend-build]
+
       - run:
           name: Install dependencies
           working_directory: frontend
