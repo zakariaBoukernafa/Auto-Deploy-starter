@@ -9,10 +9,10 @@
     repo: deb https://deb.nodesource.com/node_13.x bionic main
     update_cache: yes
 
-- name: "Install nodejs"
+- name: "Install nodejs and npm"
   apt:
     update_cache: yes
-    name: nodejs
+    name: ["nodejs", "npm"]
     state: present
 
 - name: "install PM2"
