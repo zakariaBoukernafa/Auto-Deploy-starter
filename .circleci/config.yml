@@ -193,6 +193,11 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
+          name: Install dependencies
+          command: |
+            sudo apt update -y
+            sudo apt install awscli -y
+      - run:
           name: Run migrations
           working_directory: backend
           command: |
@@ -203,7 +208,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ./backend/migrations_dump.txt
             then
-              curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy-environment
 
