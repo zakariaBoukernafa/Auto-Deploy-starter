@@ -301,6 +301,8 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
+            echo "${API_URL}" > backend_ip.txt
+            echo "API_URL = ${API_URL}"
             if curl ${API_URL}/api/status | grep "ok"
             then
                 return 0
