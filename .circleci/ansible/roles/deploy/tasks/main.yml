@@ -1,12 +1,12 @@
 ---
-- name: "created dir"
+- name: "create dir"
   file:
     path: ~/api
     state: directory
 
 - name: "Unarchive api"
   unarchive:
-    src: artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: ~/api
 
 - name: "start api"
