@@ -28,7 +28,7 @@ commands:
           name: Install Node.js 13
           command: |
             curl -fsSL https://deb.nodesource.com/setup_13.x | bash -
-            sudo apt install -y nodejs
+            yum install -y nodejs
 
   install_ansible:
     description: Install Ansible
