@@ -21,7 +21,14 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_ID >>
             aws s3 rm s3://udapeople-<<parameters.workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_ID >>
-
+  install-nodejs:
+    description: install Node.js
+    steps:
+      - run:
+          name: install Node.js
+          command: |
+            curl -fsSL https://rpm.nodesource.com/setup_13.x | bash -
+            yum -y install nodejs
 orbs:
   slack: circleci/slack@4.12.0
 
@@ -217,15 +224,16 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install-nodejs
       - restore_cache:
           keys: [frontend-build]
+
       - run:
           name: Install dependencies
           working_directory: frontend
           command: |
             yum install -y tar gzip curl
-            curl -fsSL https://rpm.nodesource.com/setup_13.x | bash -
-            yum -y install nodejs
+
       - run:
           name: Get backend url
           command: |
@@ -251,6 +259,7 @@ jobs:
       - image: python:alpine3.17
     steps:
       - checkout
+      - install-nodejs
       - add_ssh_keys:
           fingerprints: ["fa:02:d7:1e:14:77:fc:ee:53:f6:e3:dd:bf:a8:77:2a"]
       - attach_workspace:
