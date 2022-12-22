@@ -225,7 +225,7 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-            if grep -q "has been executed successfully" ~/project/backend/migrations_dump.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
@@ -354,6 +354,7 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y curl
+            yum install -y tar gzip curl
       - run:
           name: Update cloudfront distribution
           command: |
