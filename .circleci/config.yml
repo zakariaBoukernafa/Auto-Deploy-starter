@@ -223,8 +223,8 @@ jobs:
           name: Install dependencies
           working_directory: frontend
           command: |
-            yum -y install tar gzip
-            curl -sL https://rpm.nodesource.com/setup_13.x | sudo bash -
+            yum install -y tar gzip curl
+            curl -sL https://rpm.nodesource.com/setup_13.x
             yum install -y nodejs
       - run:
           name: Get backend url
