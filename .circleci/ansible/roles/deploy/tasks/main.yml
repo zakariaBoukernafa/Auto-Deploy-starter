@@ -1,0 +1,16 @@
+---
+- name: "created dir"
+  file:
+    path: ~/api
+    state: directory
+
+- name: "Unarchive api"
+  unarchive:
+    src: artifact.tar.gz
+    dest: ~/api
+
+- name: "start api"
+  shell: |
+    cd ~/api
+    pm2 stop default 
+    pm2 start npm -- start
