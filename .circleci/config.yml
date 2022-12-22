@@ -251,7 +251,7 @@ jobs:
       - destroy-environment
   deploy-backend:
     docker:
-      - image: python:alpine3.17
+      - image: amazon/aws-cli
     steps:
       - checkout
       - install-dependencies
