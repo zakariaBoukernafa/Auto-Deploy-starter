@@ -21,7 +21,25 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_ID >>
             aws s3 rm s3://udapeople-<<parameters.workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_ID >>
+  install_nodejs:
+    description: Install Node.js 13
+    steps:
+      - run:
+          name: Install Node.js 13
+          command: |
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+            sudo apt install -y nodejs
 
+  install_ansible:
+    description: Install Ansible
+    steps:
+      - run:
+          name: Install Ansible
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
 orbs:
   slack: circleci/slack@4.12.0
 
@@ -125,7 +143,7 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: cimg/aws:2022.11
+      - image: amazon/aws-cli
     steps:
       - checkout
 
@@ -212,16 +230,17 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: cimg/aws:2022.11
+      - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
-
+      - install_nodejs
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install dependencies
           working_directory: frontend
           command: |
+            yum install -y tar gzip curl
             npm i
       - run:
           name: Get backend url
