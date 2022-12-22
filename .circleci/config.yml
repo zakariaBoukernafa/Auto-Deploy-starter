@@ -21,25 +21,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_ID >>
             aws s3 rm s3://udapeople-<<parameters.workflow_ID>> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_ID >>
-  install_nodejs:
-    description: Install Node.js 13
-    steps:
-      - run:
-          name: Install Node.js 13
-          command: |
-            curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-            sudo yum install -y nodejs
 
-  install_ansible:
-    description: Install Ansible
-    steps:
-      - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common -y
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible -y
 orbs:
   slack: circleci/slack@4.12.0
 
@@ -148,7 +130,7 @@ jobs:
       - checkout
       - run:
           name: Install tar and gzip
-          command: sudo yum install -y tar gzip curl
+          command: yum install -y tar gzip curl
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -235,7 +217,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -243,7 +224,9 @@ jobs:
           working_directory: frontend
           command: |
             sudo yum install -y tar gzip curl
-            npm i
+            yum install -y curl tar sudo
+            curl -sL https://rpm.nodesource.com/setup_13.x | sudo bash -
+            yum install -y nodejs
       - run:
           name: Get backend url
           command: |
@@ -259,6 +242,7 @@ jobs:
           name: Deploy frontend objects
           working_directory: frontend
           command: |
+            npm i
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}  --recursive
