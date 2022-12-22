@@ -251,10 +251,9 @@ jobs:
       - destroy-environment
   deploy-backend:
     docker:
-      - image: amazon/aws-cli
+      - image: python:alpine3.17
     steps:
       - checkout
-      - install-dependencies
       - add_ssh_keys:
           fingerprints: ["fa:02:d7:1e:14:77:fc:ee:53:f6:e3:dd:bf:a8:77:2a"]
       - attach_workspace:
@@ -262,10 +261,11 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Install ansible
+          name: Install dependencies
           command: |
-            yum install epel-release
-            yum install ansible
+            apk add --update ansible
+            pip install awscli
+            apk add --update nodejs npm
       - run:
           name: Deploy backend
           working_directory: backend
