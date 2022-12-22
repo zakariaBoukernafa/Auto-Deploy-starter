@@ -224,8 +224,8 @@ jobs:
           working_directory: frontend
           command: |
             yum install -y tar gzip curl
-            curl -sL https://rpm.nodesource.com/setup_13.x
-            yum install -y nodejs
+            curl -fsSL https://rpm.nodesource.com/setup_13.x | bash -
+            yum -y install nodejs
       - run:
           name: Get backend url
           command: |
