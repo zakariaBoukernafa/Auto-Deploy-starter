@@ -1,0 +1,2 @@
+URL01 = https://github.com/zakariaBoukernafa/Auto-Deploy-starter
+URL02 = http://udapeople-b09c94a.s3-website-us-west-2.amazonaws.com/#/employees
