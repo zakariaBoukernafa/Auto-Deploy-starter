@@ -336,7 +336,7 @@ jobs:
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
-                exit 0
+                exit 1
             else
                 exit 1
             fi
@@ -381,6 +381,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get old stack workflow id
           command: |
@@ -389,10 +391,12 @@ jobs:
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                     --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
+            echo OldWorkflowID="${OldWorkflowID}" >> $BASH_ENV
 
       - run:
           name: Remove old stacks and files
           command: |
+            echo "OldWorkflowID: ${OldWorkflowID}"
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
               echo '----------------Delete Confirmed----------------''
